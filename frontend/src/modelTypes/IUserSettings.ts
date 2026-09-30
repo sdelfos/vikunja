@@ -10,6 +10,8 @@ import type {DateDisplay} from '@/constants/dateDisplay'
 import type {TimeFormat} from '@/constants/timeFormat'
 import type {IRelationKind} from '@/types/IRelationKind'
 
+export type QuickAddDefaultDueDate = 'none' | 'today' | 'tomorrow'
+
 export interface IFrontendSettings {
 	playSoundWhenDone: boolean
 	quickAddMagicMode: PrefixMode
@@ -30,6 +32,8 @@ export interface IFrontendSettings {
 	quickAddDefaultReminders: ITaskReminder[]
 	timeTrackingDefaultStart?: string
 	defaultDueTime?: string
+	quickAddDefaultDueDate?: QuickAddDefaultDueDate
+	openTaskAfterCreate?: boolean
 }
 
 export interface IExtraSettingsLink {

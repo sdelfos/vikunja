@@ -182,6 +182,12 @@
         "timeFormat": "Time format",
         "defaultDueTime": "Default due time",
         "defaultDueTimeDescription": "Used as the default time when setting a task's due date without specifying a time, including date picker selections and Quick Add Magic.",
+        "quickAddDefaultDueDate": "Default due date for new tasks",
+        "quickAddDefaultDueDateDescription": "Applied to tasks created from the add task field or a kanban bucket when no date was entered. Uses the default due time above.",
+        "quickAddDefaultDueDateNone": "No due date",
+        "quickAddDefaultDueDateToday": "Today",
+        "quickAddDefaultDueDateTomorrow": "Tomorrow",
+        "openTaskAfterCreate": "Open a task right after creating it",
         "timeTrackingDefaultStart": "Time tracking smart-fill start time",
         "timeFormatOptions": {
           "12h": "12-hour (AM/PM)",

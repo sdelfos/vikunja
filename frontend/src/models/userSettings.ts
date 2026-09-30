@@ -39,6 +39,8 @@ export default class UserSettingsModel extends AbstractModel<IUserSettings> impl
 		desktopQuickEntryShortcut: 'CmdOrCtrl+Shift+A',
 		quickAddDefaultReminders: [],
 		defaultDueTime: undefined,
+		quickAddDefaultDueDate: 'none',
+		openTaskAfterCreate: false,
 	}
 	extraSettingsLinks = {}
 

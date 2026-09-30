@@ -684,6 +684,10 @@ async function addTaskToBucket(bucketId: IBucket['id']) {
 	if (bucket && bucket.limit && bucket.count >= bucket.limit) {
 		toggleShowNewTaskInput(bucketId)
 	}
+
+	if (authStore.settings.frontendSettings.openTaskAfterCreate) {
+		openTask(task)
+	}
 }
 
 function scrollTaskContainerToTop(bucketId: IBucket['id']) {

@@ -69,6 +69,18 @@
 				{{ $t('user.settings.general.defaultDueTimeDescription') }}
 			</p>
 			<FormField
+				:label="$t('user.settings.general.quickAddDefaultDueDate')"
+				layout="two-col"
+			>
+				<FormSelect
+					v-model="settings.frontendSettings.quickAddDefaultDueDate"
+					:options="quickAddDefaultDueDateOptions"
+				/>
+			</FormField>
+			<p class="help">
+				{{ $t('user.settings.general.quickAddDefaultDueDateDescription') }}
+			</p>
+			<FormField
 				v-if="hasFilters"
 				:label="$t('user.settings.general.filterUsedOnOverview')"
 				layout="two-col"
@@ -227,6 +239,10 @@
 				/>
 			</FormField>
 			<FormCheckbox
+				v-model="settings.frontendSettings.openTaskAfterCreate"
+				:label="$t('user.settings.general.openTaskAfterCreate')"
+			/>
+			<FormCheckbox
 				v-model="settings.frontendSettings.playSoundWhenDone"
 				:label="$t('user.settings.general.playSoundWhenDone')"
 			/>
@@ -358,6 +374,12 @@ const defaultViewOptions = computed(() =>
 	})),
 )
 
+const quickAddDefaultDueDateOptions = computed(() => [
+	{value: 'none', label: t('user.settings.general.quickAddDefaultDueDateNone')},
+	{value: 'today', label: t('user.settings.general.quickAddDefaultDueDateToday')},
+	{value: 'tomorrow', label: t('user.settings.general.quickAddDefaultDueDateTomorrow')},
+])
+
 const minimumPriorityOptions = computed(() => [
 	{value: PRIORITIES.LOW, label: t('task.priority.low')},
 	{value: PRIORITIES.MEDIUM, label: t('task.priority.medium')},
@@ -443,6 +465,8 @@ const settings = ref<IUserSettings>({
 		// Clone to escape the store's readonly array type.
 		quickAddDefaultReminders: [...(authStore.settings.frontendSettings.quickAddDefaultReminders ?? [])],
 		timeTrackingDefaultStart: authStore.settings.frontendSettings.timeTrackingDefaultStart ?? '09:00',
+		quickAddDefaultDueDate: authStore.settings.frontendSettings.quickAddDefaultDueDate ?? 'none',
+		openTaskAfterCreate: authStore.settings.frontendSettings.openTaskAfterCreate ?? false,
 	},
 })
 

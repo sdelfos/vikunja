@@ -170,6 +170,8 @@ export const useAuthStore = defineStore('auth', () => {
 				commentSortOrder: 'asc',
 				desktopQuickEntryShortcut: 'CmdOrCtrl+Shift+A',
 				defaultDueTime: undefined,
+				quickAddDefaultDueDate: 'none',
+				openTaskAfterCreate: false,
 				...newSettings.frontendSettings,
 			},
 		})

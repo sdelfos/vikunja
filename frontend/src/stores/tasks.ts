@@ -40,6 +40,8 @@ import {runWrites} from '@/helpers/runWrites'
 import {error} from '@/message'
 import {REPEAT_TYPES} from '@/types/IRepeatAfter'
 import {TASK_REPEAT_MODES} from '@/types/IRepeatMode'
+import type {QuickAddDefaultDueDate} from '@/modelTypes/IUserSettings'
+import {getDateWithTime} from '@/helpers/time/getDateWithTime'
 
 interface MatchedAssignee extends IUser {
 	match: string,
@@ -60,6 +62,20 @@ export function buildDefaultRemindersForQuickAdd(
 		relativePeriod: d.relativePeriod,
 		relativeTo: REMINDER_PERIOD_RELATIVE_TO_TYPES.DUEDATE,
 	}))
+}
+
+export function buildDefaultDueDateForQuickAdd(
+	setting: QuickAddDefaultDueDate | undefined,
+	now: Date = new Date(),
+): string | null {
+	if (setting !== 'today' && setting !== 'tomorrow') {
+		return null
+	}
+	const date = new Date(now)
+	if (setting === 'tomorrow') {
+		date.setDate(date.getDate() + 1)
+	}
+	return getDateWithTime(date).toISOString()
 }
 
 // IDEA: maybe use a small fuzzy search here to prevent errors
@@ -503,7 +519,9 @@ export const useTaskStore = defineStore('task', () => {
 		}
 
 		// I don't know why, but it all goes up in flames when I just pass in the date normally.
-		const dueDate = parsedTask.date !== null ? new Date(parsedTask.date).toISOString() : null
+		const dueDate = parsedTask.date !== null
+			? new Date(parsedTask.date).toISOString()
+			: buildDefaultDueDateForQuickAdd(authStore.settings.frontendSettings.quickAddDefaultDueDate)
 
 		const task = new TaskModel({
 			title: cleanedTitle,

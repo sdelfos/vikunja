@@ -247,6 +247,18 @@ async function addTask() {
 			emit('tasksAdded', allCreated)
 		}
 
+		if (
+			authStore.settings.frontendSettings.openTaskAfterCreate &&
+			allCreated.length === 1 &&
+			bulk.error === null
+		) {
+			await router.push({
+				name: 'task.detail',
+				params: {id: allCreated[0].id},
+				state: {backdropView: router.currentRoute.value.fullPath},
+			})
+		}
+
 		if (bulk.error !== null) {
 			newTaskTitle.value = taskTitleBackup
 			error(bulk.error)

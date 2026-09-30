@@ -17,7 +17,8 @@ vi.mock('@/stores/base', () => ({
 	useBaseStore: () => ({setHasTasks: vi.fn()}),
 }))
 
-import {buildDefaultRemindersForQuickAdd, useTaskStore} from './tasks'
+import {buildDefaultDueDateForQuickAdd, buildDefaultRemindersForQuickAdd, useTaskStore} from './tasks'
+import {useAuthStore} from './auth'
 import {useLabelStore} from './labels'
 import LabelModel from '@/models/label'
 import {REMINDER_PERIOD_RELATIVE_TO_TYPES} from '@/types/IReminderPeriodRelativeTo'
@@ -29,6 +30,32 @@ const aDefault: ITaskReminder = {
 	relativePeriod: -3600,
 	relativeTo: REMINDER_PERIOD_RELATIVE_TO_TYPES.DUEDATE,
 } as ITaskReminder
+
+describe('buildDefaultDueDateForQuickAdd', () => {
+	const now = new Date(2026, 4, 1, 9, 15)
+
+	beforeEach(() => {
+		setActivePinia(createPinia())
+		const authStore = useAuthStore()
+		authStore.setUserSettings({
+			...authStore.settings,
+			frontendSettings: {...authStore.settings.frontendSettings, defaultDueTime: '17:00'},
+		})
+	})
+
+	it('returns null when no default is configured', () => {
+		expect(buildDefaultDueDateForQuickAdd(undefined, now)).toBeNull()
+		expect(buildDefaultDueDateForQuickAdd('none', now)).toBeNull()
+	})
+
+	it('uses today at the default due time', () => {
+		expect(buildDefaultDueDateForQuickAdd('today', now)).toBe(new Date(2026, 4, 1, 17, 0).toISOString())
+	})
+
+	it('uses tomorrow at the default due time', () => {
+		expect(buildDefaultDueDateForQuickAdd('tomorrow', now)).toBe(new Date(2026, 4, 2, 17, 0).toISOString())
+	})
+})
 
 describe('buildDefaultRemindersForQuickAdd', () => {
 	it('returns empty array when due date is null', () => {
