@@ -83,8 +83,10 @@
 			:loading="loading"
 		>
 			<ul class="p-2 tasks">
+				<!-- Done tasks are hidden rather than removed, so the row stays mounted and "undo" can bring it back. -->
 				<li
 					v-for="task in tasks"
+					v-show="!task.done"
 					:key="task.id"
 				>
 					<SingleTaskInProject
@@ -294,11 +296,6 @@ function updateTasks(updatedTask: ITask) {
 	for (let t = 0; t < tasks.value.length; t++) {
 		if (tasks.value[t].id === updatedTask.id) {
 			tasks.value[t] = updatedTask
-			// Move the task to the end of the done tasks if it is now done
-			if (updatedTask.done) {
-				tasks.value.splice(t, 1)
-				tasks.value.push(updatedTask)
-			}
 			break
 		}
 	}

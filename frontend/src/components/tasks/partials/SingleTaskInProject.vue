@@ -343,6 +343,8 @@ async function markAsDone(checked: boolean, wasReverted: boolean = false) {
 		updateDueDate()
 
 		if (wasReverted) {
+			// Let the parent know too, so lists that hide done tasks show it again.
+			emit('taskUpdated', newTask)
 			return
 		}
 
