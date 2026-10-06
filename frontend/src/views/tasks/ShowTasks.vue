@@ -131,6 +131,7 @@ import {useLabelStore} from '@/stores/labels'
 import type {TaskFilterParams} from '@/services/taskCollection'
 import TaskCollectionService from '@/services/taskCollection'
 import {PERMISSIONS} from '@/constants/permissions'
+import {TASK_REPEAT_MODES} from '@/types/IRepeatMode'
 
 const props = withDefaults(defineProps<{
 	dateFrom?: Date | string,
@@ -298,6 +299,17 @@ function updateTasks(updatedTask: ITask) {
 			tasks.value[t] = updatedTask
 			break
 		}
+	}
+
+	// Completing a repeating task moves its due date instead of marking it done. Reload so it
+	// lands in the right place (or leaves the date range); same order as navigating back here.
+	const repeatAmount = typeof updatedTask.repeatAfter === 'number'
+		? updatedTask.repeatAfter
+		: updatedTask.repeatAfter.amount
+	const isRepeating = repeatAmount > 0
+		|| (repeatAmount === 0 && updatedTask.repeatMode === TASK_REPEAT_MODES.REPEAT_MODE_MONTH)
+	if (isRepeating) {
+		loadPendingTasks(props.dateFrom as Date | string, props.dateTo as Date | string, filterIdUsedOnOverview.value)
 	}
 }
 
